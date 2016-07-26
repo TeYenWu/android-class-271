@@ -24,7 +24,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="submit"
-        android:layout_below="@+id/radioGroup" />
+        android:layout_below="@+id/radioGroup"
+        android:background="@drawable/button" />
 
     <EditText
         android:layout_width="match_parent"

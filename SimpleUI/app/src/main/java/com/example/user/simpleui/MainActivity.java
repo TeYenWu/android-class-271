@@ -2,6 +2,7 @@ package com.example.user.simpleui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -35,6 +36,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     sex = "female";
                 }
+            }
+        });
+
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    submit(v);
+                    return true;
+                }
+                return false;
             }
         });
 
