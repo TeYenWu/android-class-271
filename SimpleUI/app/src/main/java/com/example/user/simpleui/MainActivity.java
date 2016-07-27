@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     String drink = "black tea";
 
-    List<String> orders = new ArrayList<>();
+    List<Order> orders = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupListView()
     {
-        String[] data = new String[]{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, orders);
+//        String[] data = new String[]{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
+//        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, orders);
+
+        OrderAdapter adapter = new OrderAdapter(this, orders);
         listView.setAdapter(adapter);
     }
 
@@ -80,11 +82,16 @@ public class MainActivity extends AppCompatActivity {
     public void submit(View view)
     {
         String text = editText.getText().toString();
-        text = text + " order: " + drink;
-        textView.setText(text);
+        String result = text + " order: " + drink;
+        textView.setText(result);
         editText.setText("");
 
-        orders.add(text);
+        Order order = new Order();
+        order.note = text;
+        order.drink = drink;
+        order.storeInfo = (String)spinner.getSelectedItem();
+
+        orders.add(order);
         setupListView();
     }
 }
