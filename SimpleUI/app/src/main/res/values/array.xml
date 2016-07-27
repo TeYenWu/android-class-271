@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="storeInfos">
+        <item>NTU store</item>
+        <item>Ximen store</item>
+        <item>NCCU store</item>
+        <item>NCU store</item>
+        <item>NTUT store</item>
+    </string-array>
+</resources>
