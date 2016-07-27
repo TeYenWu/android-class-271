@@ -24,8 +24,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="submit"
-        android:layout_below="@+id/radioGroup"
-        android:background="@drawable/button" />
+        android:layout_below="@+id/radioGroup" />
 
     <EditText
         android:layout_width="match_parent"
@@ -47,16 +46,23 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="male"
-            android:id="@+id/maleRadioButton"
+            android:text="black tea"
+            android:id="@+id/blackTeaRadioButton"
             android:layout_gravity="center_horizontal"
             android:checked="true" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="female"
-            android:id="@+id/femaleRadioButton"
+            android:text="green tea"
+            android:id="@+id/greenTeaRadioButton"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="milk tea"
+            android:id="@+id/milkTeaRadioButton"
             android:checked="false" />
 
     </RadioGroup>
