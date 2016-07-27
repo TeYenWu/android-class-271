@@ -42,20 +42,40 @@ public class OrderAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Holder holder;
+
         if(convertView == null)
         {
             convertView = inflater.inflate(R.layout.listview_order_item, null);
+            TextView noteTextView = (TextView)convertView.findViewById(R.id.noteTextView);
+            TextView storeInfoTextView = (TextView)convertView.findViewById(R.id.storeInfoTextView);
+            TextView drinkTextView = (TextView)convertView.findViewById(R.id.drinkTextView);
+
+            holder = new Holder();
+            holder.noteTextView = noteTextView;
+            holder.drinkTextView = drinkTextView;
+            holder.storeInfoTextView = storeInfoTextView;
+
+            convertView.setTag(holder);
+        }
+        else
+        {
+            holder = (Holder)convertView.getTag();
         }
 
-        TextView noteTextView = (TextView)convertView.findViewById(R.id.noteTextView);
-        TextView storeInfoTextView = (TextView)convertView.findViewById(R.id.storeInfoTextView);
-        TextView drinkTextView = (TextView)convertView.findViewById(R.id.drinkTextView);
 
         Order order = orders.get(position);
-        noteTextView.setText(order.note);
-        storeInfoTextView.setText(order.storeInfo);
-        drinkTextView.setText(order.drink);
+        holder.noteTextView.setText(order.note);
+        holder.storeInfoTextView.setText(order.storeInfo);
+        holder.drinkTextView.setText(order.drink);
 
         return convertView;
+    }
+
+    class Holder
+    {
+        TextView noteTextView;
+        TextView storeInfoTextView;
+        TextView drinkTextView;
     }
 }
