@@ -53,7 +53,8 @@ public class DrinkMenuActivity extends AppCompatActivity {
 
     public void setupDrinkMenuListView()
     {
-
+        DrinkAdapter adapter = new DrinkAdapter(this, drinkList);
+        drinkMenuListView.setAdapter(adapter);
     }
 
     @Override
