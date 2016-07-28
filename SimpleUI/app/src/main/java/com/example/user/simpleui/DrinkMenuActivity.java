@@ -1,5 +1,6 @@
 package com.example.user.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -79,6 +80,13 @@ public class DrinkMenuActivity extends AppCompatActivity {
         }
 
         totalTextView.setText(String.valueOf(total));
+    }
+
+    public void done(View view)
+    {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
