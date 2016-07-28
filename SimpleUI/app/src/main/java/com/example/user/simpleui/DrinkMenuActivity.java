@@ -3,12 +3,18 @@ package com.example.user.simpleui;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DrinkMenuActivity extends AppCompatActivity {
 
+    ListView drinkMenuListView;
+    TextView totalTextView;
 
     String[] drinkNames = new String[]{"White gourd tea", "Black tea", "Pearl black tea", "Milk black tea"};
     int[] lPrices = new int[]{25,35,35,25};
@@ -22,7 +28,12 @@ public class DrinkMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drink_menu);
 
+        drinkMenuListView = (ListView)findViewById(R.id.drinkMenuListView);
+        totalTextView = (TextView)findViewById(R.id.totalTextView);
+
         setData();
+
+        setupDrinkMenuListView();
 
         Log.d("Debug", "DrinkMenuActivity OnCreate");
     }
@@ -38,6 +49,11 @@ public class DrinkMenuActivity extends AppCompatActivity {
             drink.imageId = images[i];
             drinkList.add(drink);
         }
+    }
+
+    public void setupDrinkMenuListView()
+    {
+
     }
 
     @Override
