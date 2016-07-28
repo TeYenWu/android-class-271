@@ -3,6 +3,7 @@ package com.example.user.simpleui;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Order order = (Order)parent.getAdapter().getItem(position);
+                Order order = (Order) parent.getAdapter().getItem(position);
 //                Toast.makeText(MainActivity.this, "You click on" + order.note, Toast.LENGTH_SHORT).show();
                 Snackbar.make(parent, "You click on" + order.note, Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
                     @Override
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         setupListView();
         setupSpinner();
 
+        Log.d("debug", "MainActivity OnCreate");
     }
 
     private void setupListView()
@@ -109,5 +111,41 @@ public class MainActivity extends AppCompatActivity {
 
         orders.add(order);
         setupListView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("debug", "MainActivity OnStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("debug", "MainActivity OnResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("debug", "MainActivity OnPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("debug", "MainActivity OnStop");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("debug", "MainActivity onRestart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("debug", "MainActivity onDestroy");
     }
 }
