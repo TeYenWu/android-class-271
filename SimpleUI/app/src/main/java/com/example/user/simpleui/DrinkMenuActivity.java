@@ -28,7 +28,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     List<Drink> drinkList = new ArrayList<>();
 
-    List<Drink> drinkOrderList = new ArrayList<>();
+    List<DrinkOrder> drinkOrderList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +75,22 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     private void  showDrinkOrderDialog(Drink drink)
     {
+        DrinkOrder order = new DrinkOrder(drink);
+
+        for(DrinkOrder drinkOrder: drinkOrderList)
+        {
+            if(drinkOrder.drink.name.equals(drink.name))
+            {
+                order = drinkOrder;
+                break;
+            }
+        }
+
         FragmentManager fragmentManager = getFragmentManager();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
 
-        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(drink);
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(order);
 
         dialog.show(ft, "DrinkOrderDialog");
 
@@ -88,9 +99,9 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     public void setupTotalTextView()
     {
         int total = 0;
-        for (Drink drink :drinkOrderList)
+        for (DrinkOrder drinkOrder :drinkOrderList)
         {
-            total += drink.mPrice;
+            total += drinkOrder.total();
         }
 
         totalTextView.setText(String.valueOf(total));
@@ -140,7 +151,18 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     }
 
     @Override
-    public void onDrinkOrderFinished() {
+    public void onDrinkOrderFinished(DrinkOrder drinkOrder) {
+        for (int i = 0 ; i < drinkOrderList.size() ; i++)
+        {
+            if(drinkOrderList.get(i).drink.name.equals(drinkOrder.drink.name))
+            {
+                drinkOrderList.set(i, drinkOrder);
+                setupTotalTextView();
+                return;
+            }
+        }
 
+        drinkOrderList.add(drinkOrder);
+        setupTotalTextView();
     }
 }
