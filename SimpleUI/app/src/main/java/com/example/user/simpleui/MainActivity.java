@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent();
         intent.setClass(this, DrinkMenuActivity.class);
+        intent.putExtra("drinkOrderList", drinkOrders);
         startActivityForResult(intent, REQUEST_CODE_DRINK_MENU_ACTIVITY);
     }
 

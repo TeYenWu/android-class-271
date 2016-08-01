@@ -40,6 +40,9 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         setData();
 
+        drinkOrderList = getIntent().getParcelableArrayListExtra("drinkOrderList");
+        setupTotalTextView();
+
         setupDrinkMenuListView();
 
         Log.d("Debug", "DrinkMenuActivity OnCreate");
