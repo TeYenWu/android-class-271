@@ -28,7 +28,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     List<Drink> drinkList = new ArrayList<>();
 
-    List<DrinkOrder> drinkOrderList = new ArrayList<>();
+    ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +110,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     public void done(View view)
     {
         Intent intent = new Intent();
+        intent.putExtra("results", drinkOrderList);
         setResult(RESULT_OK, intent);
         finish();
     }

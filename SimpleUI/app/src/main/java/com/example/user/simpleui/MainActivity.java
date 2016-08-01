@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     List<Order> orders = new ArrayList<>();
 
+    ArrayList<DrinkOrder> drinkOrders = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,16 +105,18 @@ public class MainActivity extends AppCompatActivity {
     public void submit(View view)
     {
         String text = editText.getText().toString();
-        String result = text + " order: " + drink;
+        String result = text;
         textView.setText(result);
         editText.setText("");
 
         Order order = new Order();
         order.note = text;
-        order.drink = drink;
+        order.drinkOrders = drinkOrders;
         order.storeInfo = (String)spinner.getSelectedItem();
 
         orders.add(order);
+
+        drinkOrders = new ArrayList<>();
         setupListView();
     }
 
@@ -130,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         {
             if(resultCode == RESULT_OK)
             {
+                drinkOrders = data.getParcelableArrayListExtra("results");
                 Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
             }
         }
