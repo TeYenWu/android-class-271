@@ -1,6 +1,8 @@
 package com.example.user.simpleui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<DrinkOrder> drinkOrders = new ArrayList<>();
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
         radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
         listView = (ListView)findViewById(R.id.listView);
         spinner = (Spinner)findViewById(R.id.spinner);
+
+        sharedPreferences = getSharedPreferences("UIState", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -58,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                editor.putString("editText", editText.getText().toString());
+                editor.apply();
+
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     submit(v);
                     return true;
@@ -83,7 +95,14 @@ public class MainActivity extends AppCompatActivity {
         setupListView();
         setupSpinner();
 
+        restoreUIState();
+
         Log.d("debug", "MainActivity OnCreate");
+    }
+
+    private void restoreUIState()
+    {
+        editText.setText(sharedPreferences.getString("editText", ""));
     }
 
     private void setupListView()
