@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = (Order) parent.getAdapter().getItem(position);
 //                Toast.makeText(MainActivity.this, "You click on" + order.note, Toast.LENGTH_SHORT).show();
-                Snackbar.make(parent, "You click on" + order.note, Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
+                Snackbar.make(parent, "You click on" + order.getNote(), Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setupOrderHistory();
+//        setupOrderHistory();
         setupListView();
         setupSpinner();
 
@@ -183,9 +183,9 @@ public class MainActivity extends AppCompatActivity {
         editText.setText("");
 
         Order order = new Order();
-        order.note = text;
-        order.drinkOrders = drinkOrders;
-        order.storeInfo = (String)spinner.getSelectedItem();
+        order.setNote(text);
+        order.setDrinkOrders(drinkOrders);
+        order.setStoreInfo((String) spinner.getSelectedItem());
 
         orders.add(order);
 
