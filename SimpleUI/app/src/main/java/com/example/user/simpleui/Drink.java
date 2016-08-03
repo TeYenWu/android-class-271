@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -90,6 +91,11 @@ public class Drink extends ParseObject implements Parcelable {
 
     public void setmPrice(int mPrice) {
         this.put(MPRICE_COL, mPrice);
+    }
+
+    public ParseFile getParseFile()
+    {
+        return getParseFile("image");
     }
 
     public static ParseQuery<Drink> getQuery() { return  ParseQuery.getQuery(Drink.class);}
