@@ -29,7 +29,7 @@ public class DrinkOrder extends ParseObject implements Parcelable {
 
     public int total()
     {
-        return getDrink().lPrice * getlNumber() + getDrink().mPrice * getmNumber();
+        return getDrink().getlPrice() * getlNumber() + getDrink().getmPrice() * getmNumber();
     }
 
     @Override
