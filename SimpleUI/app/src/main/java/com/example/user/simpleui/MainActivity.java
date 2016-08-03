@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 //                e.printStackTrace();
 //            }
 //        }
-        Order.getQuery().findInBackground(new FindCallback<Order>() {
+        Order.getOrdersFromLocalThenRemote(new FindCallback<Order>() {
             @Override
             public void done(List<Order> objects, ParseException e) {
                 if(e == null)
@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
 //        String orderData = gson.toJson(order);
 //        Utils.writeFile(this, "history", orderData + "\n");
         order.saveEventually();
+        order.pinInBackground("Order");
 
         drinkOrders = new ArrayList<>();
         setupListView();

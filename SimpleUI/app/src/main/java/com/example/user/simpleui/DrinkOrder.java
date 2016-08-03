@@ -32,6 +32,7 @@ public class DrinkOrder extends ParseObject implements Parcelable {
 
     public int total()
     {
+//        return 0;
         return getDrink().getlPrice() * getlNumber() + getDrink().getmPrice() * getmNumber();
     }
 
@@ -143,7 +144,7 @@ public class DrinkOrder extends ParseObject implements Parcelable {
     public static DrinkOrder getDrinkOrderFromCache(String objectId)
     {
         try {
-            DrinkOrder drinkOrder = getQuery().setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK).get(objectId);
+            DrinkOrder drinkOrder = getQuery().fromLocalDatastore().get(objectId);
             return drinkOrder;
         } catch (ParseException e) {
             e.printStackTrace();

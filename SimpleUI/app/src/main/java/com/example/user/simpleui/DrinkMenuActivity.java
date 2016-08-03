@@ -53,7 +53,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     public void setData()
     {
-        Drink.getQuery().findInBackground(new FindCallback<Drink>() {
+        Drink.getDrinkFromLocamThenRemote(new FindCallback<Drink>() {
             @Override
             public void done(List<Drink> objects, ParseException e) {
                 if(e==null)
