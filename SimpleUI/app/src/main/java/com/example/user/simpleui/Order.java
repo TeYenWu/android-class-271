@@ -2,6 +2,7 @@ package com.example.user.simpleui;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.List;
 
@@ -47,5 +48,13 @@ public class Order extends ParseObject {
 
     public void setDrinkOrders(List<DrinkOrder> drinkOrders) {
         put(DRINKORDERS_COL, drinkOrders);
+    }
+
+    public static ParseQuery<Order> getQuery()
+    {
+        ParseQuery<Order> query = ParseQuery.getQuery(Order.class);
+        query.include(DRINKORDERS_COL);
+        query.include(DRINKORDERS_COL + "." + DrinkOrder.DRINK_COL);
+        return query;
     }
 }

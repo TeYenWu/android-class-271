@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        setupOrderHistory();
-        setupListView();
+        setupOrderHistory();
+//        setupListView();
         setupSpinner();
 
         restoreUIState();
@@ -141,22 +141,32 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupOrderHistory()
     {
-        String orderDatas = Utils.readFile(this, "history");
-        String[] orderData = orderDatas.split("\n");
-        Gson gson = new Gson();
-
-        for (String data : orderData)
-        {
-            try {
-                Order order = gson.fromJson(data, Order.class);
-                if (order != null)
-                    orders.add(order);
+//        String orderDatas = Utils.readFile(this, "history");
+//        String[] orderData = orderDatas.split("\n");
+//        Gson gson = new Gson();
+//
+//        for (String data : orderData)
+//        {
+//            try {
+//                Order order = gson.fromJson(data, Order.class);
+//                if (order != null)
+//                    orders.add(order);
+//            }
+//            catch (JsonSyntaxException e)
+//            {
+//                e.printStackTrace();
+//            }
+//        }
+        Order.getQuery().findInBackground(new FindCallback<Order>() {
+            @Override
+            public void done(List<Order> objects, ParseException e) {
+                if(e == null)
+                {
+                    orders = objects;
+                    setupListView();
+                }
             }
-            catch (JsonSyntaxException e)
-            {
-                e.printStackTrace();
-            }
-        }
+        });
     }
 
     private void setupListView()
