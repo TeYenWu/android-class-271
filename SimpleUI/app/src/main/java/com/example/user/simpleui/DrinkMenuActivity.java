@@ -11,6 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -43,13 +46,24 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         drinkOrderList = getIntent().getParcelableArrayListExtra("drinkOrderList");
         setupTotalTextView();
 
-        setupDrinkMenuListView();
+//        setupDrinkMenuListView();
 
         Log.d("Debug", "DrinkMenuActivity OnCreate");
     }
 
     public void setData()
     {
+        Drink.getQuery().findInBackground(new FindCallback<Drink>() {
+            @Override
+            public void done(List<Drink> objects, ParseException e) {
+                if(e==null)
+                {
+                    drinkList = objects;
+                    setupDrinkMenuListView();
+                }
+            }
+        });
+
 //        for(int i = 0; i < 4; i++)
 //        {
 //            Drink drink = new Drink();

@@ -24,8 +24,11 @@ public class DrinkOrder extends ParseObject implements Parcelable {
 
     public DrinkOrder(Drink drink)
     {
+        super();
         this.setDrink(drink);
     }
+
+    public DrinkOrder(){ super();}
 
     public int total()
     {
@@ -59,6 +62,7 @@ public class DrinkOrder extends ParseObject implements Parcelable {
     }
 
     protected DrinkOrder(Parcel in) {
+        super();
         this.setDrink((Drink)in.readParcelable(Drink.class.getClassLoader()));
         this.setmNumber(in.readInt());
         this.setlNumber(in.readInt());
