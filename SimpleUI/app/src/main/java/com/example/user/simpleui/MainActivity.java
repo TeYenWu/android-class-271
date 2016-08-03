@@ -189,9 +189,10 @@ public class MainActivity extends AppCompatActivity {
 
         orders.add(order);
 
-        Gson gson = new Gson();
-        String orderData = gson.toJson(order);
-        Utils.writeFile(this, "history", orderData + "\n");
+//        Gson gson = new Gson();
+//        String orderData = gson.toJson(order);
+//        Utils.writeFile(this, "history", orderData + "\n");
+        order.saveEventually();
 
         drinkOrders = new ArrayList<>();
         setupListView();
