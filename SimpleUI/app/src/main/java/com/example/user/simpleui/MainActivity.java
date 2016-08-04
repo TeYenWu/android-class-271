@@ -90,13 +90,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = (Order) parent.getAdapter().getItem(position);
+                goToOrderDetail(order);
 //                Toast.makeText(MainActivity.this, "You click on" + order.note, Toast.LENGTH_SHORT).show();
-                Snackbar.make(parent, "You click on" + order.getNote(), Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                }).show();
+//                Snackbar.make(parent, "You click on" + order.getNote(), Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                    }
+//                }).show();
             }
         });
 
@@ -215,6 +216,14 @@ public class MainActivity extends AppCompatActivity {
         intent.setClass(this, DrinkMenuActivity.class);
         intent.putExtra("drinkOrderList", drinkOrders);
         startActivityForResult(intent, REQUEST_CODE_DRINK_MENU_ACTIVITY);
+    }
+
+    public void goToOrderDetail(Order order)
+    {
+        Intent intent = new Intent();
+        intent.setClass(this, OrderDetailActivity.class);
+        intent.putExtra("order", order);
+        startActivity(intent);
     }
 
     @Override
