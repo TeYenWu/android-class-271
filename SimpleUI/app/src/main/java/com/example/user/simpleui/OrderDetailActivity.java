@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.lang.ref.WeakReference;
 import java.util.logging.LogRecord;
@@ -73,7 +74,9 @@ public class OrderDetailActivity extends AppCompatActivity implements GeoCodingT
     @Override
     public void callbackWithGeoCodingResult(LatLng latLng) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("NTU").snippet("Hello Marker");
         map.moveCamera(cameraUpdate);
+        map.addMarker(markerOptions);
 
     }
 //
