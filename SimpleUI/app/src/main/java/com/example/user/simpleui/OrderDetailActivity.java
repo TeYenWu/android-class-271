@@ -41,6 +41,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.lang.ref.WeakReference;
@@ -58,6 +59,8 @@ public class OrderDetailActivity extends AppCompatActivity implements GeoCodingT
     GoogleApiClient googleApiClient;
 
     LocationRequest locationRequest;
+
+    Polyline polyline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,27 +144,28 @@ public class OrderDetailActivity extends AppCompatActivity implements GeoCodingT
         if(locationRequest == null)
         {
             locationRequest = new LocationRequest();
-            locationRequest.setInterval(5000);
-            locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+            locationRequest.setInterval(1000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
 
         Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
-        LatLng start = new LatLng(25.0206, 121.534);
-        if(location != null)
+        LatLng start;
+        if(location != null) {
             start = new LatLng(location.getLatitude(), location.getLongitude());
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(start, 17));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(start, 17));
 
-        Routing routing = new Routing.Builder()
-                .travelMode(AbstractRouting.TravelMode.WALKING)
-                .alternativeRoutes(false)
-                .waypoints(start, storeLocation)
-                .withListener(this)
-                .build();
+            Routing routing = new Routing.Builder()
+                    .travelMode(AbstractRouting.TravelMode.WALKING)
+                    .alternativeRoutes(false)
+                    .waypoints(start, storeLocation)
+                    .withListener(this)
+                    .build();
 
-        routing.execute();
+            routing.execute();
+        }
 
     }
 
@@ -189,7 +193,54 @@ public class OrderDetailActivity extends AppCompatActivity implements GeoCodingT
 
     @Override
     public void onLocationChanged(Location location) {
+        if(polyline == null)
+        {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 17));
 
+            Routing routing = new Routing.Builder()
+                    .travelMode(AbstractRouting.TravelMode.WALKING)
+                    .alternativeRoutes(false)
+                    .waypoints(new LatLng(location.getLatitude(), location.getLongitude()), storeLocation)
+                    .withListener(this)
+                    .build();
+
+            routing.execute();
+            return;
+        }
+
+        List<LatLng> points = polyline.getPoints();
+
+        int index = -1;
+
+        for(int i=0; i < points.size();i ++)
+        {
+            if(i < points.size() -1)
+            {
+                LatLng point1 = points.get(i);
+                LatLng point2 =  points.get(i+1);
+                double offset = 0.0001;
+
+                Double maxLat = Math.max(point1.latitude, point2.latitude) + offset;
+                Double maxLng = Math.max(point1.longitude, point2.longitude) + offset;
+                Double minLat = Math.min(point1.latitude, point2.latitude) - offset;
+                Double minLng = Math.min(point1.longitude, point2.longitude) - offset;
+                if(location.getLatitude() >= minLat && location.getLatitude() <= maxLat && location.getLongitude() >= minLng && location.getLongitude() <= maxLng)
+                {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        if(index != -1)
+        {
+            for (int i = index -1 ; i>=0 ; i--)
+            {
+                points.remove(0);
+            }
+            points.set(0, new LatLng(location.getLatitude(), location.getLongitude()));
+            polyline.setPoints(points);
+        }
     }
 
     @Override
@@ -215,7 +266,7 @@ public class OrderDetailActivity extends AppCompatActivity implements GeoCodingT
         polylineOptions.color(Color.GREEN);
         polylineOptions.width(10);
 
-        map.addPolyline(polylineOptions);
+        polyline = map.addPolyline(polylineOptions);
     }
 
     @Override
