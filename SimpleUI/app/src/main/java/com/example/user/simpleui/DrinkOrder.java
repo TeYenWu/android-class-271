@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 /**
  * Created by user on 2016/8/1.
@@ -20,6 +22,8 @@ public class DrinkOrder extends ParseObject implements Parcelable {
     static final String SUGAR_COL = "sugar";
     static final String NOTE_COL = "note";
 
+    public DrinkOrder(){super();}
+
     public DrinkOrder(Drink drink)
     {
         this.setDrink(drink);
@@ -27,7 +31,7 @@ public class DrinkOrder extends ParseObject implements Parcelable {
 
     public int total()
     {
-        return getDrink().lPrice * getlNumber() + getDrink().mPrice * getmNumber();
+        return getDrink().getlPrice() * getlNumber() + getDrink().getmPrice() * getmNumber();
     }
 
     @Override
@@ -55,9 +59,20 @@ public class DrinkOrder extends ParseObject implements Parcelable {
         }
 
     }
+    public static DrinkOrder getDrinkOrderFromCache(String objectId)
+    {
+        try {
+            return getQuery().setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK).get(objectId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ParseQuery<DrinkOrder> getQuery(){ return  ParseQuery.getQuery(DrinkOrder.class);}
 
     protected DrinkOrder(Parcel in) {
-        this.setDrink(in.readParcelable(Drink.class.getClassLoader()));
+        this.setDrink((Drink) in.readParcelable(Drink.class.getClassLoader()));
         this.setmNumber(in.readInt());
         this.setlNumber(in.readInt());
         this.setIce(in.readString());
@@ -73,8 +88,10 @@ public class DrinkOrder extends ParseObject implements Parcelable {
             {
                 return new DrinkOrder(source);
             }
-            else {
-
+            else
+            {
+                String objectId = source.readString();
+                return  DrinkOrder.getDrinkOrderFromCache(objectId);
             }
         }
 
@@ -85,7 +102,7 @@ public class DrinkOrder extends ParseObject implements Parcelable {
     };
 
     public Drink getDrink() {
-        return getParseObject(DRINK_COL);
+        return (Drink) getParseObject(DRINK_COL);
     }
 
     public void setDrink(Drink drink) {

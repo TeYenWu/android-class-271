@@ -11,6 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -41,7 +44,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         setData();
 
         drinkOrderList = getIntent().getParcelableArrayListExtra("drinkOrderList");
-        setupTotalTextView();
+//        setupTotalTextView();
 
         setupDrinkMenuListView();
 
@@ -50,15 +53,22 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     public void setData()
     {
-        for(int i = 0; i < 4; i++)
-        {
-            Drink drink = new Drink();
-            drink.name = drinkNames[i];
-            drink.lPrice = lPrices[i];
-            drink.mPrice = mPrices[i];
-            drink.imageId = images[i];
-            drinkList.add(drink);
-        }
+//        for(int i = 0; i < 4; i++)
+//        {
+//            Drink drink = new Drink();
+//            drink.name = drinkNames[i];
+//            drink.lPrice = lPrices[i];
+//            drink.mPrice = mPrices[i];
+//            drink.imageId = images[i];
+//            drinkList.add(drink);
+//        }
+        Drink.syncDrinksFromRemote(new FindCallback<Drink>() {
+            @Override
+            public void done(List<Drink> objects, ParseException e) {
+                drinkList = objects;
+                setupDrinkMenuListView();
+            }
+        });
     }
 
     public void setupDrinkMenuListView()
@@ -82,7 +92,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         for(DrinkOrder drinkOrder: drinkOrderList)
         {
-            if(drinkOrder.drink.name.equals(drink.name))
+            if(drinkOrder.getDrink().getName().equals(drink.getName()))
             {
                 order = drinkOrder;
                 break;
@@ -158,7 +168,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     public void onDrinkOrderFinished(DrinkOrder drinkOrder) {
         for (int i = 0 ; i < drinkOrderList.size() ; i++)
         {
-            if(drinkOrderList.get(i).drink.name.equals(drinkOrder.drink.name))
+            if(drinkOrderList.get(i).getDrink().getName().equals(drinkOrder.getDrink().getName()))
             {
                 drinkOrderList.set(i, drinkOrder);
                 setupTotalTextView();

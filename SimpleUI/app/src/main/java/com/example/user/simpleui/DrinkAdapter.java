@@ -8,8 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.GetFileCallback;
+import com.parse.ParseException;
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -43,7 +48,7 @@ public class DrinkAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Holder holder;
+        final Holder holder;
         if(convertView == null)
         {
             convertView = inflater.inflate(R.layout.listview_drink_item, null);
@@ -62,11 +67,11 @@ public class DrinkAdapter extends BaseAdapter {
 
         Drink drink = drinks.get(position);
 
-        holder.drinkNameTextView.setText(drink.name);
-        holder.lPriceTextView.setText(String.valueOf(drink.lPrice));
-        holder.mPriceTextView.setText(String.valueOf(drink.mPrice));
-        holder.imageView.setImageResource(drink.imageId);
-
+        holder.drinkNameTextView.setText(drink.getName());
+        holder.lPriceTextView.setText(String.valueOf(drink.getlPrice()));
+        holder.mPriceTextView.setText(String.valueOf(drink.getmPrice()));
+//        holder.imageView.setImageResource(drink.);
+        Picasso.with(inflater.getContext()).load(drink.getImageURL()).into(holder.imageView);
         return convertView;
     }
 

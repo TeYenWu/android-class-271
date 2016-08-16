@@ -3,6 +3,8 @@ package com.example.user.simpleui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         textView = (TextView)findViewById(R.id.textView);
         editText = (EditText)findViewById(R.id.editText);
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = (Order) parent.getAdapter().getItem(position);
 //                Toast.makeText(MainActivity.this, "You click on" + order.note, Toast.LENGTH_SHORT).show();
+                goToDetail(order);
                 Snackbar.make(parent, "You click on" + order.getNote(), Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -100,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        setupOrderHistory();
+        setupOrderHistory();
         setupListView();
         setupSpinner();
 
@@ -141,21 +146,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupOrderHistory()
     {
-        String orderDatas = Utils.readFile(this, "history");
-        String[] orderData = orderDatas.split("\n");
-        Gson gson = new Gson();
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-        for (String data : orderData)
+        FindCallback<Order> callback = new FindCallback<Order>() {
+            @Override
+            public void done(List<Order> objects, ParseException e) {
+                if (e == null) {
+                    orders = objects;
+                    OrderAdapter adapter = new OrderAdapter(MainActivity.this, orders);
+                    listView.setAdapter(adapter);
+                }
+            }
+        };
+
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            Order.getQuery().fromLocalDatastore().findInBackground(callback);
+        }
+        else
         {
-            try {
-                Order order = gson.fromJson(data, Order.class);
-                if (order != null)
-                    orders.add(order);
-            }
-            catch (JsonSyntaxException e)
-            {
-                e.printStackTrace();
-            }
+            Order.getOrdersFromRemote(callback);
         }
     }
 
@@ -163,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
     {
 //        String[] data = new String[]{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
 //        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, orders);
+
 
         OrderAdapter adapter = new OrderAdapter(this, orders);
         listView.setAdapter(adapter);
@@ -189,10 +200,11 @@ public class MainActivity extends AppCompatActivity {
 
         orders.add(order);
 
-        Gson gson = new Gson();
-        String orderData = gson.toJson(order);
-        Utils.writeFile(this, "history", orderData + "\n");
+//        Gson gson = new Gson();
+//        String orderData = gson.toJson(order);
+//        Utils.writeFile(this, "history", orderData + "\n");
 
+        order.saveEventually();
         drinkOrders = new ArrayList<>();
         setupListView();
     }
@@ -216,6 +228,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public void goToDetail(Order order)
+    {
+        Intent intent = new Intent();
+        intent.setClass(this, OrderDetailActivity.class);
+        intent.putExtra("order", order);
+        startActivity(intent);
     }
 
     @Override
